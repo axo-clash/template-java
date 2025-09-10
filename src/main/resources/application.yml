@@ -1,0 +1,102 @@
+spring:
+  profiles:
+    active: @spring.profiles.active@
+  jackson:
+    default-property-inclusion: NON_NULL
+  sql:
+    init:
+      mode: never
+  mvc:
+    dispatch-options-request: true
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+  flyway:
+    locations: classpath:db/migration
+    baselineOnMigrate: true
+    table: flyway_schema_history
+    create-schemas: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: ${database.username}
+    password: ${database.password}
+    url: jdbc:postgresql://${database.host}/${database.name}
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        event:
+          merge:
+            entity_copy_observer: allow
+        cache:
+          use_query_cache: true
+          use_second_level_cache: true
+          region:
+            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+        javax:
+          cache:
+            missing_cache_strategy: create
+            provider: org.ehcache.jsr107.EhcacheCachingProvider
+        jdbc:
+          batch_size: 100
+          fetch_size: 400
+          order_inserts: true
+          order_updates: true
+      jakarta:
+        persistence:
+          sharedCache:
+            mode: ENABLE_SELECTIVE
+    open-in-view: false
+
+management:
+  endpoints:
+    web:
+      cors:
+        allowed-origin-patterns: ${cors.allowed-origins}
+        allowed-methods: ${cors.allowed-methods}
+        allowed-headers: ${cors.allowed-headers}
+        exposed-headers: ${cors.exposed-headers}
+        allow-credentials: ${cors.allow-credentials}
+        max-age: ${cors.max-age}
+      exposure:
+        include: info,health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+logging:
+  file:
+    name: ./logs/template-java.log
+  level:
+    org:
+      hibernate.SQL: error
+      springframework.web: INFO
+
+springdoc:
+  show-actuator: true
+  swagger-ui:
+    operationsSorter: alpha
+    tagsSorter: alpha
+    display-request-duration: true
+
+cors:
+  allowed-origins: '*'
+  allowed-methods: GET, POST, PUT, PATCH, DELETE, OPTIONS
+  allowed-headers: Access-Control-Allow-Headers, Access-Control-Allow-Origin, Authorization, X-Requested-With, X-Auth-Token, Content-Type, Accept, X-CSRF-TOKEN, X-Frame-Options
+  exposed-headers: Content-Disposition
+  allow-credentials: true
+  max-age: 3600
+
+security:
+  expirationTime: 86400000 # 1 day
+  secret: template-java-secret # TODO change this
+  tokenPrefix: Bearer 
+  headerString: Authorization
+  loginUrl: /api/v1/users/login
