@@ -1,6 +1,6 @@
 package fr.axopen.templatejava.enums;
 
-public enum ActionType {
+public enum ActionEnum {
     MOVE_LEFT,
     MOVE_RIGHT,
     MOVE_UP,

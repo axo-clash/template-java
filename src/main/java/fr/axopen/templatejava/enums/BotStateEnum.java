@@ -1,8 +1,8 @@
 package fr.axopen.templatejava.enums;
 
-public enum BotState {
+public enum BotStateEnum {
     UNKNOWN,
     READY,
     PLAYING,
-    WAITING_FOR_OPPONENT
+    WAITING_FOR_OPPONENT,
 }

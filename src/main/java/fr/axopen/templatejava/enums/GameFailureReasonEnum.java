@@ -1,6 +1,6 @@
 package fr.axopen.templatejava.enums;
 
-public enum FailureReason {
+public enum GameFailureReasonEnum {
     BOT_CONNECTION_ERROR,
     BOT_INFO_RETRIEVAL_ERROR,
     GAME_EXECUTION_ERROR,

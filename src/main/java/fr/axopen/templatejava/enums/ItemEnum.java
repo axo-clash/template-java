@@ -1,10 +1,8 @@
 package fr.axopen.templatejava.enums;
 
-public enum CaseContent {
-    FIRST_BOT,
-    SECOND_BOT,
+public enum ItemEnum {
     BULLET_LEFT,
     BULLET_RIGHT,
     BULLET_UP,
-    BULLET_DOWN
+    BULLET_DOWN,
 }

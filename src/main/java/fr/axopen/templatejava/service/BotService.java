@@ -3,7 +3,7 @@ package fr.axopen.templatejava.service;
 import fr.axopen.templatejava.dto.BotInfoDTO;
 import fr.axopen.templatejava.dto.GameBotDTO;
 import fr.axopen.templatejava.dto.PlayResponseDTO;
-import fr.axopen.templatejava.enums.ActionType;
+import fr.axopen.templatejava.enums.ActionEnum;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -18,8 +18,8 @@ public class BotService {
     }
     
     public PlayResponseDTO play(GameBotDTO gameBotDTO) {
-        ActionType[] actions = ActionType.values();
-        ActionType randomAction = actions[random.nextInt(actions.length)];
+        ActionEnum[] actions = ActionEnum.values();
+        ActionEnum randomAction = actions[random.nextInt(actions.length)];
         return new PlayResponseDTO(randomAction);
     }
 }

@@ -1,6 +1,6 @@
 package fr.axopen.templatejava.enums;
 
-public enum Winner {
+public enum WinnerEnum {
     FIRST_BOT,
     SECOND_BOT,
     DRAW

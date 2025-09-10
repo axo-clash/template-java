@@ -1,7 +1,6 @@
 package fr.axopen.templatejava.dto;
 
-import fr.axopen.templatejava.enums.ActionType;
+import fr.axopen.templatejava.enums.ActionEnum;
 
-public record PlayResponseDTO(
-        ActionType action) {
+public record PlayResponseDTO(ActionEnum action) {
 }

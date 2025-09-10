@@ -1,6 +1,8 @@
 package fr.axopen.templatejava.dto;
 
-import fr.axopen.templatejava.enums.BotType;
+import fr.axopen.templatejava.enums.BotTypeEnum;
+
+import java.io.Serializable;
 
 public record BotDTO(
         Long id,
@@ -8,7 +10,8 @@ public record BotDTO(
         String version,
         String url,
         BotDataDTO data,
-        BotType botType,
+        BotTypeEnum botType,
         CoordDTO coordinates,
-        Boolean faster) {
+        boolean faster
+) implements Serializable {
 }

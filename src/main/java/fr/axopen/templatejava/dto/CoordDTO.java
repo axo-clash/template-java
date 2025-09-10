@@ -1,6 +1,6 @@
 package fr.axopen.templatejava.dto;
 
-public record CoordDTO(
-        Integer x,
-        Integer y) {
+import java.io.Serializable;
+
+public record CoordDTO(int x, int y) implements Serializable {
 }

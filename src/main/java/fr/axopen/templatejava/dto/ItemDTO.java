@@ -1,8 +1,11 @@
 package fr.axopen.templatejava.dto;
 
-import fr.axopen.templatejava.enums.ItemType;
+import fr.axopen.templatejava.enums.ItemEnum;
+
+import java.io.Serializable;
 
 public record ItemDTO(
-        ItemType type,
-        BotDTO owner) {
+        ItemEnum type,
+        BotDTO owner
+) implements Serializable {
 }

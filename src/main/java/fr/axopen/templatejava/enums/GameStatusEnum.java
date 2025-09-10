@@ -1,6 +1,6 @@
 package fr.axopen.templatejava.enums;
 
-public enum GameStatus {
+public enum GameStatusEnum {
     STARTING,
     RUNNING,
     PAUSED,

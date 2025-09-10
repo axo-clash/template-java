@@ -1,10 +1,13 @@
 package fr.axopen.templatejava.dto;
 
-import fr.axopen.templatejava.enums.BotState;
+import fr.axopen.templatejava.enums.BotStateEnum;
+
+import java.io.Serializable;
 
 public record BotDataDTO(
-        Integer life,
-        Integer forbiddenActions,
-        BotState state,
-        Long lastActionTimeMs) {
+        int life,
+        int forbiddenActions,
+        BotStateEnum state,
+        Long lastActionTimeMs
+)implements Serializable {
 }

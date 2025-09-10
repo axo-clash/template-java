@@ -1,13 +1,16 @@
 package fr.axopen.templatejava.dto;
 
-import fr.axopen.templatejava.enums.ActionType;
-import java.time.LocalDateTime;
+import fr.axopen.templatejava.enums.ActionEnum;
+
+import java.io.Serializable;
+import java.time.Instant;
 
 public record ActionDTO(
         Long id,
         Long botId,
-        ActionType action,
+        ActionEnum action,
         Boolean forbidden,
         Long executionTimeMs,
-        LocalDateTime createdDate) {
+        Instant createdDate
+) implements Serializable {
 }

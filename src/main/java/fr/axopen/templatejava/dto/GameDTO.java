@@ -1,20 +1,23 @@
 package fr.axopen.templatejava.dto;
 
-import fr.axopen.templatejava.enums.Winner;
-import fr.axopen.templatejava.enums.EndReason;
-import fr.axopen.templatejava.enums.FailureReason;
-import fr.axopen.templatejava.enums.GameStatus;
+import fr.axopen.templatejava.enums.GameEndReasonEnum;
+import fr.axopen.templatejava.enums.GameFailureReasonEnum;
+import fr.axopen.templatejava.enums.GameStatusEnum;
+import fr.axopen.templatejava.enums.WinnerEnum;
+
+import java.io.Serializable;
 import java.util.List;
 
 public record GameDTO(
         Long id,
         BotDTO firstBot,
         BotDTO secondBot,
-        List<List<CaseDTO>> board,
-        Integer currentTurn,
+        CaseDTO[][] board,
+        int currentTurn,
         List<ActionDTO> actions,
-        Winner winner,
-        EndReason endReason,
-        FailureReason failureReason,
-        GameStatus status) {
+        WinnerEnum winner,
+        GameEndReasonEnum endReason,
+        GameFailureReasonEnum failureReason,
+        GameStatusEnum status
+) implements Serializable {
 }
