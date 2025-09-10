@@ -1,6 +1,0 @@
-database:
-  name: template-java-test
-
-spring:
-  flyway:
-    clean-disabled: false

@@ -1,0 +1,11 @@
+package fr.axopen.templatejava.enums;
+
+public enum FailureReason {
+    BOT_CONNECTION_ERROR,
+    BOT_INFO_RETRIEVAL_ERROR,
+    GAME_EXECUTION_ERROR,
+    INVALID_BOARD_STATE,
+    BOT_COMMUNICATION_TIMEOUT,
+    JSON_PROCESSING_ERROR,
+    UNKNOWN_ERROR
+}

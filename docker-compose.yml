@@ -1,39 +1,5 @@
-version: '3'
-
-volumes:
-  database-data:
-
 services:
-  db:
-    image: postgres:17.0-alpine
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: root
-      POSTGRES_USER: root
-      POSTGRES_DB: template-java
-    volumes:
-      - database-data:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U root"]
-      interval: 3s
-      timeout: 2s
-      retries: 15
-
   api:
     build: .
-    depends_on:
-      db:
-        condition: service_healthy
     ports:
-      - 8080:8080
-    environment:
-      - DATABASE_USERNAME=root
-      - DATABASE_PASSWORD=root
-      - DATABASE_HOST=db
-    healthcheck:
-      test: ["CMD", "curl","-f","http://localhost:8080/actuator/health"]
-      interval: 3s
-      timeout: 2s
-      retries: 15
+      - 6000:6000
