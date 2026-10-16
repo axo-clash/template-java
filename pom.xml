@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.5</version>
+        <version>4.1.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>fr.axopen</groupId>
@@ -14,7 +14,7 @@
     <name>template-java</name>
     <description>AXOPEN Starter Project</description>
     <properties>
-        <java.version>21</java.version>
+        <java.version>25</java.version>
         <checkstyle.version>10.21.1</checkstyle.version>
     </properties>
     <dependencies>
@@ -44,14 +44,21 @@
                         </exclude>
                     </excludes>
                 </configuration>
+                <executions>
+                    <!-- Genere les classes AOT au build : permet le demarrage
+                         avec -Dspring.aot.enabled=true (containers) -->
+                    <execution>
+                        <id>process-aot</id>
+                        <goals>
+                            <goal>process-aot</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>

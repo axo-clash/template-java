@@ -1,5 +1,7 @@
 services:
   api:
     build: .
+    environment:
+      PORT: 9000
     ports:
-      - 6000:6000
+      - 9000:9000
