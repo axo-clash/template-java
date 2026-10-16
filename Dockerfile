@@ -1,38 +1,53 @@
-# Utilise l'image Docker officielle Maven comme image de base
-FROM maven:3.9.9-amazoncorretto-21 AS build
+# --- Etape 1 : Build de l'application ---
+FROM maven:3-eclipse-temurin-25-alpine AS build
 
-# Set le répertoire de travail à /app
 WORKDIR /app
 
 # Copie le pom.xml et les sources dans le répertoire de travail
-COPY pom.xml .
+COPY pom.xml ./
 COPY src ./src
 COPY checkstyle ./checkstyle
 
 # Construit l'application avec Maven
 RUN mvn clean package -DskipTests
 
-# --- Etape 2 : Exécution du JAR dans un conteneur plus léger ---
-FROM amazoncorretto:21-al2023-headless
+# Determine les modules JDK reels utilises par l'application (jdeps)
+# puis genere un runtime Java minimal ne contenant que ces modules (jlink)
+RUN "$JAVA_HOME/bin/jar" xf /app/target/*.jar \
+    && "$JAVA_HOME/bin/jdeps" --ignore-missing-deps -q --recursive --multi-release 25 \
+        --print-module-deps --class-path 'BOOT-INF/lib/*' /app/target/*.jar > /app/deps.info \
+    && "$JAVA_HOME/bin/jlink" --add-modules "$(cat /app/deps.info),jdk.crypto.ec" \
+        --strip-debug --compress 'zip-9' --no-header-files --no-man-pages \
+        --output /app/custom-jre
 
-# Install shadow-utils to get usermod
-# Create user
-# Remove shadow-utils
-RUN yum update -y \
-    && yum install -y shadow-utils  \
-    && groupadd spring && useradd -m -g spring spring \
-    && yum remove -y shadow-utils \
-    && yum clean all
+# Extrait le jar en couches : jar fin + librairies a plat, demarrage plus rapide
+RUN "$JAVA_HOME/bin/java" -Djarmode=tools -jar /app/target/*.jar extract --layers --destination /app/extracted \
+    && mv /app/extracted/application/*.jar /app/extracted/application/app.jar
 
-# Changer de l'utilisateur 'root' à l'utilisateur 'spring'
+# --- Etape 2 : Runtime Alpine minimal avec le JRE custom ---
+FROM alpine:3.24.1
+
+WORKDIR /app
+
+ENV JAVA_HOME=/opt/jre
+ENV PATH="$JAVA_HOME/bin:$PATH"
+ENV JAVA_OPTS="-XX:MaxRAMPercentage=90 -XX:MaxMetaspaceSize=256m --add-opens java.base/java.nio=ALL-UNNAMED -Dspring.aot.enabled=true"
+
+# Cree un utilisateur non-root pour executer l'application
+RUN addgroup -S spring && adduser -S -G spring spring
+
+# Copie le runtime Java minimal et les couches de l'application
+COPY --from=build /app/custom-jre $JAVA_HOME
+COPY --chown=spring:spring --from=build /app/extracted/dependencies/ ./
+COPY --chown=spring:spring --from=build /app/extracted/spring-boot-loader/ ./
+COPY --chown=spring:spring --from=build /app/extracted/snapshot-dependencies/ ./
+COPY --chown=spring:spring --from=build /app/extracted/application/ ./
+
 USER spring:spring
 
-# Copie le JAR du conteneur de build vers le conteneur de deploying
-COPY --chown=spring --chmod=700 --from=build /app/target/*.jar /app/app.jar
+# Port d'ecoute par defaut (surchargeable via la variable d'environnement PORT)
+ENV PORT=9000
+EXPOSE 9000
 
-# Exécute l'application Java
-CMD ["java", "-jar", "/app/app.jar"]
-
-# Ajoute un healthcheck pour vérifier que l'application s'exécute correctement
-HEALTHCHECK --interval=1m --timeout=3s \
-  CMD curl -f http://localhost:8080/actuator/health || exit 1
+# Execute l'application Java
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar /app/app.jar"]
