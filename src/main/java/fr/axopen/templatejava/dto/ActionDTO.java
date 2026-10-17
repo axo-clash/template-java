@@ -11,6 +11,7 @@ public record ActionDTO(
         ActionEnum action,
         Boolean forbidden,
         Long executionTimeMs,
-        Instant createdDate
+        Instant createdDate,
+        CoordDTO coordinates
 ) implements Serializable {
 }

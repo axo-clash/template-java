@@ -7,6 +7,7 @@ import fr.axopen.templatejava.enums.ActionEnum;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 @Service
 public class BotService {
@@ -18,7 +19,10 @@ public class BotService {
     }
     
     public PlayResponseDTO play(GameBotDTO gameBotDTO) {
-        ActionEnum[] actions = ActionEnum.values();
+        // PLACE_TRAP needs a target and cooldown handling; this starter only moves and shoots.
+        ActionEnum[] actions = Arrays.stream(ActionEnum.values())
+                .filter(action -> action != ActionEnum.PLACE_TRAP && action != ActionEnum.UNKNOWN)
+                .toArray(ActionEnum[]::new);
         ActionEnum randomAction = actions[random.nextInt(actions.length)];
         return new PlayResponseDTO(randomAction);
     }

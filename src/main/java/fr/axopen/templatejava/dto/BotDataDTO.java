@@ -8,6 +8,7 @@ public record BotDataDTO(
         int life,
         int forbiddenActions,
         BotStateEnum state,
-        Long lastActionTimeMs
+        Long lastActionTimeMs,
+        Integer nextTrapTurn
 )implements Serializable {
 }

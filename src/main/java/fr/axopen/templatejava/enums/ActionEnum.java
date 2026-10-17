@@ -9,5 +9,6 @@ public enum ActionEnum {
     SHOOT_RIGHT,
     SHOOT_UP,
     SHOOT_DOWN,
+    PLACE_TRAP,
     UNKNOWN
 }
